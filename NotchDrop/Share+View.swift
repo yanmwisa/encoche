@@ -80,59 +80,32 @@ struct ShareView: View {
             }
     }
 
-    var dropAreaColors: [NSColor] {
-        if targeting {
-            type.colorfulPresetTargeting.colors
-        } else {
-            type.colorfulPresetNormal.colors
-        }
-    }
-
     var dropArea: some View {
-        ColorfulView(
-            color: .init(get: { dropAreaColors.map { Color($0) } }, set: { _ in }),
-            speed: .init(get: { targeting ? 1.5 : 0 }, set: { _ in }),
-            transitionSpeed: .constant(25)
-        )
-        .opacity(0.5)
-        .clipShape(RoundedRectangle(cornerRadius: vm.cornerRadius))
-        .overlay { dropLabel }
-        .aspectRatio(1, contentMode: .fit)
-        .contentShape(Rectangle())
-        .changeEffect(
-            .spray(origin: UnitPoint(x: 0.5, y: 0.5)) {
-                Image(systemName: "paperplane")
-                    .foregroundStyle(.white)
-            },
-            value: trigger
-        )
+        ShareTile(type: type, cornerRadius: vm.cornerRadius, isTargeting: targeting, onTap: pickFilesToShare)
+            .contentShape(Rectangle())
+            .changeEffect(
+                .spray(origin: UnitPoint(x: 0.5, y: 0.5)) {
+                    Image(systemName: "paperplane")
+                        .foregroundStyle(.white)
+                },
+                value: trigger
+            )
     }
 
-    var dropLabel: some View {
-        VStack(spacing: 8) {
-            type.icon
-                .resizable()
-                .scaledToFit()
-                .frame(width: 30, height: 30)
-            Text(type.title)
+    func pickFilesToShare() {
+        trigger = .init()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+            vm.notchClose()
         }
-        .font(.system(.headline, design: .rounded))
-        .contentShape(Rectangle())
-        .onTapGesture {
-            trigger = .init()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                vm.notchClose()
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                let picker = NSOpenPanel()
-                picker.allowsMultipleSelection = true
-                picker.canChooseDirectories = true
-                picker.canChooseFiles = true
-                picker.begin { response in
-                    if response == .OK {
-                        let drop = type.service(picker.urls)
-                        drop.begin()
-                    }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            let picker = NSOpenPanel()
+            picker.allowsMultipleSelection = true
+            picker.canChooseDirectories = true
+            picker.canChooseFiles = true
+            picker.begin { response in
+                if response == .OK {
+                    let drop = type.service(picker.urls)
+                    drop.begin()
                 }
             }
         }
@@ -145,5 +118,58 @@ struct ShareView: View {
             let drop = type.service(urls)
             drop.begin()
         }
+    }
+}
+
+/// Le dessin de la tuile de partage, sans l'état de l'app : ShareView la compose avec le glisser-déposer,
+/// et `--render-preview` la dessine seule.
+struct ShareTile: View {
+    let type: ShareView.ShareType
+    let cornerRadius: CGFloat
+    let isTargeting: Bool
+    let onTap: () -> Void
+    /// Faux pour `--render-preview` : le fond animé est une vue AppKit qu'une image ne sait pas dessiner.
+    var hasAnimatedBackground = true
+
+    var colors: [NSColor] {
+        if isTargeting {
+            type.colorfulPresetTargeting.colors
+        } else {
+            type.colorfulPresetNormal.colors
+        }
+    }
+
+    var body: some View {
+        background
+            .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+        .overlay { label }
+        .aspectRatio(1, contentMode: .fit)
+    }
+
+    @ViewBuilder
+    var background: some View {
+        if hasAnimatedBackground {
+            ColorfulView(
+                color: .init(get: { colors.map { Color($0) } }, set: { _ in }),
+                speed: .init(get: { isTargeting ? 1.5 : 0 }, set: { _ in }),
+                transitionSpeed: .constant(25)
+            )
+            .opacity(0.5)
+        } else {
+            Color.clear
+        }
+    }
+
+    var label: some View {
+        VStack(spacing: 8) {
+            type.icon
+                .resizable()
+                .scaledToFit()
+                .frame(width: 30, height: 30)
+            Text(type.title)
+        }
+        .font(.system(.headline, design: .rounded))
+        .contentShape(Rectangle())
+        .onTapGesture(perform: onTap)
     }
 }
