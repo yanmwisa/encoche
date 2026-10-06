@@ -57,6 +57,11 @@ enum NotchPreview {
                 .padding(.vertical, 10)
                 .frame(width: 568)
             }
+            sheetBlock("Open notch: Files", height: 184) {
+                openedNotch(selection: .normal) {
+                    filesScreen
+                }
+            }
             sheetBlock("Open notch: Sessions", height: 184) {
                 openedNotch(selection: .sessions) {
                     SessionsListView(summary: full, onGoTo: { _ in }, isScrollable: false)
@@ -131,6 +136,19 @@ enum NotchPreview {
         .background(Color(white: 0.12))
         .environment(\.colorScheme, .dark)
         .foregroundStyle(.white)
+    }
+
+    /// L'écran Fichiers, avec l'étagère vide et la durée de garde par défaut. Il est composé des vues sans état
+    /// de ShareView et TrayView : rien ne lit ni n'écrit les vrais fichiers ou réglages de l'utilisateur.
+    /// 16 pt : l'écart et l'arrondi par défaut de NotchViewModel.
+    private static var filesScreen: some View {
+        let storageTime = TrayView.storageTimeLabel(.oneDay, customTime: 1, customUnit: .days)
+        return HStack(spacing: 16) {
+            ShareTile(type: .airdrop, cornerRadius: 16, isTargeting: false, onTap: {}, hasAnimatedBackground: false)
+            TrayDropZone(cornerRadius: 16, isLoading: false) {
+                TrayEmptyHint(text: TrayView.emptyHint(keepingFor: storageTime))
+            }
+        }
     }
 
     /// La mise en page de l'encoche ouverte : bande de la caméra vide, barre d'onglets, puis l'écran choisi.

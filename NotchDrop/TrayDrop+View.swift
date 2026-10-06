@@ -14,8 +14,8 @@ struct TrayView: View {
     @State private var targeting = false
     @State private var scrollIndex = 0
 
-    var storageTime: String {
-        switch tvm.selectedFileStorageTime {
+    static func storageTimeLabel(_ storageTime: TrayDrop.FileStorageTime, customTime: Int, customUnit: TrayDrop.CustomstorageTimeUnit) -> String {
+        switch storageTime {
         case .oneHour:
             return NSLocalizedString("an hour", comment: "")
         case .oneDay:
@@ -29,9 +29,24 @@ struct TrayView: View {
         case .never:
             return NSLocalizedString("forever", comment: "")
         case .custom:
-            let localizedTimeUnit = NSLocalizedString(tvm.customStorageTimeUnit.localized.lowercased(), comment: "")
-            return "\(tvm.customStorageTime) \(localizedTimeUnit)"
+            let localizedTimeUnit = NSLocalizedString(customUnit.localized.lowercased(), comment: "")
+            return "\(customTime) \(localizedTimeUnit)"
         }
+    }
+
+    static func emptyHint(keepingFor storageTime: String) -> String {
+        [
+            String(
+                format: NSLocalizedString("Drag files here to keep them for %@", comment: ""),
+                storageTime
+            ),
+            "&",
+            NSLocalizedString("Press Option to delete", comment: ""),
+        ].joined(separator: " ")
+    }
+
+    var storageTime: String {
+        Self.storageTimeLabel(tvm.selectedFileStorageTime, customTime: tvm.customStorageTime, customUnit: tvm.customStorageTimeUnit)
     }
 
     var body: some View {
@@ -44,39 +59,11 @@ struct TrayView: View {
     }
 
     var panel: some View {
-        RoundedRectangle(cornerRadius: vm.cornerRadius)
-            .strokeBorder(style: StrokeStyle(lineWidth: 4, dash: [10]))
-            .foregroundStyle(.white.opacity(0.1))
-            .background(loading)
-            .overlay {
-                content
-                    .padding()
-            }
-            .animation(vm.animation, value: tvm.items)
-            .animation(vm.animation, value: tvm.isLoading)
-    }
-
-    var loading: some View {
-        RoundedRectangle(cornerRadius: vm.cornerRadius)
-            .foregroundStyle(.white.opacity(0.1))
-            .conditionalEffect(
-                .repeat(
-                    .glow(color: .blue, radius: 50),
-                    every: 1.5
-                ),
-                condition: tvm.isLoading > 0
-            )
-    }
-
-    var text: String {
-        [
-            String(
-                format: NSLocalizedString("Drag files here to keep them for %@", comment: ""),
-                storageTime
-            ),
-            "&",
-            NSLocalizedString("Press Option to delete", comment: ""),
-        ].joined(separator: " ")
+        TrayDropZone(cornerRadius: vm.cornerRadius, isLoading: tvm.isLoading > 0) {
+            content
+        }
+        .animation(vm.animation, value: tvm.items)
+        .animation(vm.animation, value: tvm.isLoading)
     }
 
     /// Les fichiers, avec de quoi voir ceux qui dépassent (flèches) et tout retirer d'un geste.
@@ -136,15 +123,55 @@ struct TrayView: View {
     var content: some View {
         Group {
             if tvm.isEmpty {
-                VStack(spacing: 8) {
-                    Image(systemName: "tray.and.arrow.down.fill")
-                    Text(text)
-                        .multilineTextAlignment(.center)
-                        .font(.system(.headline, design: .rounded))
-                }
+                TrayEmptyHint(text: Self.emptyHint(keepingFor: storageTime))
             } else {
                 filledTray
             }
+        }
+    }
+}
+
+/// Le cadre de l'étagère (bord pointillé, lueur pendant un chargement), sans l'état de l'app :
+/// TrayView le remplit avec ses fichiers, `--render-preview` avec le texte d'accueil.
+struct TrayDropZone<Content: View>: View {
+    let cornerRadius: CGFloat
+    let isLoading: Bool
+    @ViewBuilder let content: Content
+
+    var body: some View {
+        RoundedRectangle(cornerRadius: cornerRadius)
+            .strokeBorder(style: StrokeStyle(lineWidth: 4, dash: [10]))
+            .foregroundStyle(.white.opacity(0.1))
+            .background(loading)
+            .overlay {
+                content
+                    .padding()
+            }
+    }
+
+    var loading: some View {
+        RoundedRectangle(cornerRadius: cornerRadius)
+            .foregroundStyle(.white.opacity(0.1))
+            .conditionalEffect(
+                .repeat(
+                    .glow(color: .blue, radius: 50),
+                    every: 1.5
+                ),
+                condition: isLoading
+            )
+    }
+}
+
+/// Ce que montre l'étagère vide.
+struct TrayEmptyHint: View {
+    let text: String
+
+    var body: some View {
+        VStack(spacing: 8) {
+            Image(systemName: "tray.and.arrow.down.fill")
+            Text(text)
+                .multilineTextAlignment(.center)
+                .font(.system(.headline, design: .rounded))
         }
     }
 }
