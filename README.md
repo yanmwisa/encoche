@@ -12,13 +12,19 @@ Encoche is a macOS app that lives in the notch. Open it and you get a small pane
 
 Encoche is a fork of [NotchDrop](https://github.com/Lakr233/NotchDrop) by Lakr233, which provides the notch window and the file shelf. The Sessions and Player screens, the Chrome bridge and the notification card are added here. See [Credits](#credits).
 
-<!-- TODO before publishing: add a screenshot or a short GIF of each screen in docs/images/ and show them here. -->
+| Sessions | A permission to give |
+| --- | --- |
+| ![Four sessions: my-project needs a permission, notes waits for an answer, weather-app is working, website is done; each has a Go to button](docs/images/sessions.png) | ![The Sessions screen asks to allow or deny a git push for my-project](docs/images/approval.png) |
+| **Next steps to pick** | **Player** |
+| ![Three suggested next steps, two of them picked in order, with Launch and Clear buttons](docs/images/next-steps.png) | ![A Spotify track with previous, pause and next, and volume sliders for the Mac, Spotify and a YouTube tab](docs/images/player.png) |
+
+*Drawn by the app itself from sample data: `NotchDrop --render-preview preview.png`. The screens Encoche adds are in English only for now; translations are welcome.*
 
 ## Requirements
 
 - macOS 14 (Sonoma) or later
 - A MacBook with a notch is what it is designed for. Behaviour on other Macs has not been tested.
-- To build: Xcode Command Line Tools (`xcode-select --install`). Full Xcode is optional.
+- To build: Swift 6.2 or later, that is Xcode 26 or the Command Line Tools for Xcode 26 (`xcode-select --install`). Check with `swift --version`. Full Xcode is optional. One library, swift-collections 1.3.0, refuses older versions.
 
 ## Install
 
@@ -33,7 +39,7 @@ open build/NotchDrop.app
 
 The binary is still named `NotchDrop` while the project is called Encoche. The app is signed ad hoc, which is enough to run on the Mac that built it. macOS will ask for the permissions it needs the first time (see [Privacy and security](#privacy-and-security)).
 
-To build with Xcode instead: `open NotchDrop.xcodeproj`, then run (⌘R). A build with Xcode also includes the translations (English, French, German, Japanese, Simplified and Traditional Chinese); the command-line build is English only.
+To build with Xcode instead: `open NotchDrop.xcodeproj`, then run (⌘R). A build with Xcode also includes the translations (English, French, German, Japanese, Simplified and Traditional Chinese); the command-line build shows the original text only. Either way, the screens Encoche adds (tab bar, Sessions, Player, the cards) are in English only: they are not in the translation catalogue yet.
 
 To see the notification card with fake data: `open build/NotchDrop.app --args --demo-notifications`.
 

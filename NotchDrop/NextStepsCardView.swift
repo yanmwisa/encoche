@@ -30,7 +30,7 @@ struct NextStepsCardView: View {
     }
 
     private var launchTitle: String {
-        picked.isEmpty ? "Lancer" : "Lancer " + picked.map { String($0 + 1) }.joined(separator: " puis ")
+        picked.isEmpty ? "Launch" : "Launch " + picked.map { String($0 + 1) }.joined(separator: " then ")
     }
 
     var body: some View {
@@ -45,7 +45,7 @@ struct NextStepsCardView: View {
                     .buttonStyle(StepButtonStyle(fill: SessionPalette.done, text: Color(red: 0.03, green: 0.13, blue: 0.06)))
                     .disabled(picked.isEmpty)
                     .opacity(picked.isEmpty ? 0.4 : 1)
-                Button("Effacer") { picked = [] }
+                Button("Clear") { picked = [] }
                     .buttonStyle(StepButtonStyle(fill: .white.opacity(0.14), text: .white))
                     .disabled(picked.isEmpty)
                     .opacity(picked.isEmpty ? 0.4 : 1)
@@ -76,7 +76,7 @@ struct NextStepsCardView: View {
                     .truncationMode(.tail)
                 Spacer(minLength: 6)
                 if let rank {
-                    Text("étape \(rank)")
+                    Text("step \(rank)")
                         .font(.system(size: 11, weight: .bold))
                         .foregroundStyle(SessionPalette.working)
                 }

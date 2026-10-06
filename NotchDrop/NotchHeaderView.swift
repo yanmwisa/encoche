@@ -27,18 +27,18 @@ struct NotchTabBar: View {
 
     var body: some View {
         HStack(spacing: 4) {
-            NotchTab(title: "Fichiers", symbol: "square.and.arrow.down", isSelected: selection == .normal) {
+            NotchTab(title: "Files", symbol: "square.and.arrow.down", isSelected: selection == .normal) {
                 onSelect(.normal)
             }
             NotchTab(title: "Sessions", symbol: "terminal", badge: waitingCount, isSelected: selection == .sessions) {
                 onSelect(.sessions)
             }
-            NotchTab(title: "Lecteur", symbol: "play.fill", note: nil, isSelected: selection == .player) {
+            NotchTab(title: "Player", symbol: "play.fill", note: nil, isSelected: selection == .player) {
                 onSelect(.player)
             }
             Spacer(minLength: 0)
             // Le menu et ses réglages partagent la même icône : l'un mène à l'autre.
-            NotchTab(title: "Réglages", symbol: "gearshape.fill", showsTitle: false, isSelected: selection == .menu || selection == .settings) {
+            NotchTab(title: "Settings", symbol: "gearshape.fill", showsTitle: false, isSelected: selection == .menu || selection == .settings) {
                 onSelect(.menu)
             }
         }

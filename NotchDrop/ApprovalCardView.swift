@@ -22,7 +22,7 @@ struct ApprovalCardView: View {
                 Text(sessionName)
                     .font(.system(size: 13, weight: .bold))
                     .lineLimit(1)
-                Text(tool.isEmpty ? "Autorisation" : tool)
+                Text(tool.isEmpty ? "Permission" : tool)
                     .font(.system(size: 10.5, weight: .bold))
                     .padding(.horizontal, 8)
                     .padding(.vertical, 1.5)
@@ -35,7 +35,7 @@ struct ApprovalCardView: View {
                         .foregroundStyle(.white.opacity(0.6))
                 }
             }
-            Text(summary.isEmpty ? "Demande une autorisation" : summary)
+            Text(summary.isEmpty ? "Asks for permission" : summary)
                 .font(.system(size: 12, design: .monospaced))
                 .lineLimit(2)
                 .truncationMode(.middle)
@@ -45,9 +45,9 @@ struct ApprovalCardView: View {
                 .background(RoundedRectangle(cornerRadius: 10, style: .continuous).fill(.white.opacity(0.07)))
                 .help(summary)
             HStack(spacing: 8) {
-                Button("Autoriser") { onAnswer(.allow) }
+                Button("Allow") { onAnswer(.allow) }
                     .buttonStyle(ApprovalButtonStyle(fill: SessionPalette.done, text: Color(red: 0.03, green: 0.13, blue: 0.06)))
-                Button("Refuser") { onAnswer(.deny) }
+                Button("Deny") { onAnswer(.deny) }
                     .buttonStyle(ApprovalButtonStyle(fill: Color(red: 0.94, green: 0.48, blue: 0.42).opacity(0.22), text: Color(red: 0.94, green: 0.48, blue: 0.42)))
             }
         }

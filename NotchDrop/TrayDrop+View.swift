@@ -101,7 +101,7 @@ struct TrayView: View {
 
     private func trayActions(_ scroller: ScrollViewProxy) -> some View {
         HStack(spacing: 8) {
-            Text(tvm.items.count == 1 ? "1 fichier" : "\(tvm.items.count) fichiers")
+            Text(tvm.items.count == 1 ? "1 file" : "\(tvm.items.count) files")
                 .font(.system(size: 11, weight: .semibold))
                 .foregroundStyle(.white.opacity(0.6))
             Spacer()
@@ -109,7 +109,7 @@ struct TrayView: View {
                 arrowButton("chevron.left", .earlier, scroller)
                 arrowButton("chevron.right", .later, scroller)
             }
-            Button("Tout effacer") { tvm.removeAll() }
+            Button("Clear all") { tvm.removeAll() }
                 .buttonStyle(.plain)
                 .font(.system(size: 11, weight: .semibold))
                 .padding(.horizontal, 9)

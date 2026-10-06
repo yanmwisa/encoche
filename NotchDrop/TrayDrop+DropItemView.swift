@@ -68,7 +68,7 @@ struct DropItemView: View {
                 .offset(x: vm.spacing / 2, y: -vm.spacing / 2)
                 .onTapGesture { tvm.delete(item.id) }
                 .allowsHitTesting(canDelete)
-                .help("Retirer de la tablette")
+                .help("Remove from the shelf")
         }
     }
 }

@@ -10,7 +10,7 @@ Thanks for helping. Issues and pull requests are welcome, in English or French.
 
 ## Set up
 
-You need macOS 14 or later and the Xcode Command Line Tools.
+You need macOS 14 or later and Swift 6.2 or later (Xcode 26 or its Command Line Tools; check with `swift --version`).
 
 ```bash
 git clone https://github.com/yanmwisa/encoche.git
