@@ -12,7 +12,13 @@ Encoche is a macOS app that lives in the notch. Open it and you get a small pane
 
 Encoche is a fork of [NotchDrop](https://github.com/Lakr233/NotchDrop) by Lakr233, which provides the notch window and the file shelf. The Sessions and Player screens, the Chrome bridge and the notification card are added here. See [Credits](#credits).
 
-<!-- TODO before publishing: add a screenshot or a short GIF of each screen in docs/images/ and show them here. -->
+| Sessions | A permission to give |
+| --- | --- |
+| ![Four sessions: my-project needs a permission, notes waits for an answer, weather-app is working, website is done; each has a Go to button](docs/images/sessions.png) | ![The Sessions screen asks to allow or deny a git push for my-project](docs/images/approval.png) |
+| **Next steps to pick** | **Player** |
+| ![Three suggested next steps, two of them picked in order, with Launch and Clear buttons](docs/images/next-steps.png) | ![A Spotify track with previous, pause and next, and volume sliders for the Mac, Spotify and a YouTube tab](docs/images/player.png) |
+
+*Drawn by the app itself from sample data: `NotchDrop --render-preview preview.png`. The screens Encoche adds are in English only for now; translations are welcome.*
 
 ## Requirements
 
