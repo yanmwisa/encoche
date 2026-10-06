@@ -45,7 +45,7 @@ struct NotchContentView: View {
         if let request = vm.pendingRequests.first {
             RequestCardView(
                 request: request,
-                position: "1 sur \(vm.pendingRequests.count)",
+                position: "1 of \(vm.pendingRequests.count)",
                 showsPosition: vm.pendingRequests.count > 1,
                 onReply: { vm.answerRequest(request, $0) }
             )

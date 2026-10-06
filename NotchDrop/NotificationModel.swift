@@ -44,10 +44,10 @@ struct IncomingMessage: Identifiable, Equatable {
 
 extension IncomingMessage {
     private static let samples: [(app: MessageApp, sender: String, text: String)] = [
-        (.iMessage, "Marie D.", "Tu passes ce soir ? On t'a gardé une place."),
-        (.whatsApp, "Groupe Équipe", "Rappel : la réunion commence dans 10 minutes."),
-        (.iMessage, "Julien", "J'ai envoyé le fichier, dis-moi si tu le reçois bien."),
-        (.whatsApp, "Awa", "Merci pour hier ! On s'appelle demain matin ?"),
+        (.iMessage, "Marie D.", "Are you coming tonight? We saved you a seat."),
+        (.whatsApp, "Team", "Reminder: the meeting starts in 10 minutes."),
+        (.iMessage, "Julien", "I sent the file, tell me if it came through."),
+        (.whatsApp, "Awa", "Thanks for yesterday! Call tomorrow morning?"),
     ]
 
     static func sample(at index: Int) -> IncomingMessage {

@@ -135,7 +135,7 @@ struct SessionsListView: View {
         // et la place sert à montrer les sessions.
         VStack(alignment: .leading, spacing: 8) {
             if summary.rows.isEmpty {
-                Text("Aucune session Claude Code détectée. Elles apparaissent dès qu'une session démarre.")
+                Text("No Claude Code session found. Sessions appear as soon as one starts.")
                     .font(.callout)
                     .foregroundStyle(.secondary)
                     .frame(maxHeight: .infinity, alignment: .top)
@@ -185,7 +185,7 @@ private struct SessionRowView: View {
             }
             Spacer(minLength: 8)
             if session.hostPID != nil {
-                Button("Y aller", action: onGoTo)
+                Button("Go to", action: onGoTo)
                     .buttonStyle(GoButtonStyle())
             }
         }

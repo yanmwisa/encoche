@@ -134,7 +134,7 @@ struct NotchPlayerContent: View {
         HStack(spacing: 10) {
             cover(for: current)
             VStack(alignment: .leading, spacing: 2) {
-                Text(current.track?.title ?? "Rien en lecture")
+                Text(current.track?.title ?? "Nothing playing")
                     .font(.system(size: 13, weight: .bold))
                     .lineLimit(1)
                 Text(current.track.map { $0.artist.isEmpty ? current.source.displayName : $0.artist } ?? current.source.displayName)
@@ -198,7 +198,7 @@ struct NotchPlayerContent: View {
                     .foregroundStyle(.white.opacity(volume == 0 ? 0.4 : 0.9))
             }
             .buttonStyle(.plain)
-            .help(volume == 0 ? "Rétablir le son du Mac" : "Couper le son du Mac")
+            .help(volume == 0 ? "Unmute the Mac" : "Mute the Mac")
             Text("Mac")
                 .font(.system(size: 12, weight: .semibold))
                 .frame(width: 66, alignment: .leading)
@@ -219,9 +219,9 @@ struct NotchPlayerContent: View {
     /// À gauche, quand aucune application de musique n'est ouverte : un mot, pour ne pas laisser un trou.
     private var nothingPlaying: some View {
         VStack(alignment: .leading, spacing: 2) {
-            Text(isBlocked ? "Contrôle refusé" : "Aucune musique")
+            Text(isBlocked ? "Control denied" : "No music")
                 .font(.system(size: 13, weight: .bold))
-            Text(isBlocked ? "Réglages Système > Automatisation" : "Ouvrez Musique ou Spotify")
+            Text(isBlocked ? "System Settings > Automation" : "Open Music or Spotify")
                 .font(.system(size: 11.5))
                 .foregroundStyle(.white.opacity(0.6))
         }
@@ -257,7 +257,7 @@ struct NotchPlayerContent: View {
                     .opacity(entry.volume == 0 ? 0.35 : 1)
             }
             .buttonStyle(.plain)
-            .help(entry.volume == 0 ? "Rétablir le son" : "Couper le son")
+            .help(entry.volume == 0 ? "Unmute" : "Mute")
             Button { onSelect(entry.source) } label: {
                 Text(entry.source.displayName)
                     .font(.system(size: 12, weight: .semibold))
@@ -292,12 +292,12 @@ struct NotchPlayerContent: View {
 
     private var empty: some View {
         VStack(spacing: 6) {
-            Text(isBlocked ? "macOS a refusé le contrôle de Musique ou Spotify." : "Aucune source ouverte.")
+            Text(isBlocked ? "macOS denied control of Music or Spotify." : "No source open.")
                 .font(.callout)
                 .foregroundStyle(.secondary)
             Text(isBlocked
-                ? "Autorisez-le dans Réglages Système > Confidentialité > Automatisation."
-                : "Ouvrez Musique ou Spotify : le titre et le volume apparaissent ici.")
+                ? "Allow it in System Settings > Privacy & Security > Automation."
+                : "Open Music or Spotify: the track and the volume appear here.")
                 .font(.footnote)
                 .foregroundStyle(.tertiary)
         }
