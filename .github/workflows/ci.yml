@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-check:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the app
+        run: ./scripts/build-app.sh
+      - name: Run the checks
+        run: |
+          export HOME="$(mktemp -d)"
+          ./scripts/check-sessions.sh
+          ./scripts/check-sessions-server.sh
+          ./scripts/check-browser-bridge.sh
+          ./scripts/check-chrome-install.sh
+          ./Checks/hook/check-hook.sh

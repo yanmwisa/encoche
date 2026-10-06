@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "Encoche : volume des onglets",
+  "version": "0.1.0",
+  "description": "Règle le volume des onglets qui jouent du son depuis l'encoche (app Encoche, sur ce Mac seulement).",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqtBFbFvGA+Z7SSSsnyHss5L5mFl0k6nqv4Xuclw2RTcoKclzEjlMGeklJeuXQOsujgCFw+ZK0JiCtGfj6p4KxLHWu/+GFgKdS0WmZQLadE5CaRdc4mbjBHp0l2CrwYvAbh28Y8MzYLwuQ5qguegxDHmdmVqXlvDDaoflKKSFAb7+pgzeejHFtpvMzTFyMu2RXiWch67/b5ilapm3KW04J9Yq76D31iZ0PfA2nzn5nqWrv0MTU9wTwb5k7tgQ938g8sVBvgccUeTyp2xOYCOtZXwHtFqn6N5oVfcE9QVNiAVT0j4iX4l2K1DxzFm6fpgtFYZxcCaBiHFP3sptDW31KQIDAQAB",
+  "permissions": [
+    "tabs",
+    "nativeMessaging",
+    "storage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ]
+}
