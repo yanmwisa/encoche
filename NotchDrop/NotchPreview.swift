@@ -17,9 +17,9 @@ enum NotchPreview {
     }
 
     private static let sessions: [AgentSession] = [
-        sample("my-project", .approval, "git push origin travail/build-sans-xcode", age: 5),
-        sample("chaosFLOW", .question, "Attend votre réponse", age: 30),
-        sample("Encoche-Mac", .working, "Travaille", age: 8),
+        sample("my-project", .approval, "git push origin feature/search", age: 5),
+        sample("notes", .question, "Attend votre réponse", age: 30),
+        sample("weather-app", .working, "Travaille", age: 8),
         sample("website", .done, "A fini", age: 200),
     ]
 
@@ -65,7 +65,7 @@ enum NotchPreview {
             sheetBlock("Encoche ouverte : une autorisation à donner", height: 184) {
                 openedNotch(selection: .sessions) {
                     ApprovalCardView(
-                        sessionName: "my-project", tool: "Bash", summary: "git push origin travail/build-sans-xcode",
+                        sessionName: "my-project", tool: "Bash", summary: "git push origin feature/search",
                         position: "1 sur 2", showsPosition: true, onAnswer: { _ in }
                     )
                 }
@@ -73,7 +73,7 @@ enum NotchPreview {
             sheetBlock("Encoche ouverte : des étapes à choisir", height: 184) {
                 openedNotch(selection: .sessions) {
                     NextStepsCardView(
-                        sessionName: "Encoche-Mac",
+                        sessionName: "weather-app",
                         labels: ["Lancer les tests", "Mettre à jour le journal", "Relancer la suite de tests"],
                         position: "", showsPosition: false, onLaunch: { _ in }, initiallyPicked: [2, 0]
                     )
