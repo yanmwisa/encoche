@@ -18,7 +18,7 @@ Encoche is a fork of [NotchDrop](https://github.com/Lakr233/NotchDrop) by Lakr23
 
 - macOS 14 (Sonoma) or later
 - A MacBook with a notch is what it is designed for. Behaviour on other Macs has not been tested.
-- To build: Xcode Command Line Tools (`xcode-select --install`). Full Xcode is optional.
+- To build: Swift 6.2 or later, that is Xcode 26 or the Command Line Tools for Xcode 26 (`xcode-select --install`). Check with `swift --version`. Full Xcode is optional. One library, swift-collections 1.3.0, refuses older versions.
 
 ## Install
 
