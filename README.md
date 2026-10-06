@@ -33,7 +33,7 @@ open build/NotchDrop.app
 
 The binary is still named `NotchDrop` while the project is called Encoche. The app is signed ad hoc, which is enough to run on the Mac that built it. macOS will ask for the permissions it needs the first time (see [Privacy and security](#privacy-and-security)).
 
-To build with Xcode instead: `open NotchDrop.xcodeproj`, then run (⌘R). A build with Xcode also includes the translations (English, French, German, Japanese, Simplified and Traditional Chinese); the command-line build is English only.
+To build with Xcode instead: `open NotchDrop.xcodeproj`, then run (⌘R). A build with Xcode also includes the translations (English, French, German, Japanese, Simplified and Traditional Chinese); the command-line build shows the original text only. Either way, the screens Encoche adds (tab bar, Sessions, Player, the cards) are in English only: they are not in the translation catalogue yet.
 
 To see the notification card with fake data: `open build/NotchDrop.app --args --demo-notifications`.
 

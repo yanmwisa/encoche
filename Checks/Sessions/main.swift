@@ -93,11 +93,11 @@ func session(_ id: String, _ phase: SessionPhase, age: TimeInterval = 0) -> Agen
 
 check("rien n'attend : pas d'oreilles", describeNotch([session("a", .working), session("b", .done)]).ears == nil)
 check("une autorisation : nom et type",
-      describeNotch([session("a", .approval)]).ears == SessionEars(left: "a", right: "Autorisation", mascotCount: 1))
+      describeNotch([session("a", .approval)]).ears == SessionEars(left: "a", right: "Permission", mascotCount: 1))
 check("une question : nom et type",
-      describeNotch([session("a", .question)]).ears == SessionEars(left: "a", right: "Vous attend", mascotCount: 1))
+      describeNotch([session("a", .question)]).ears == SessionEars(left: "a", right: "Waiting for you", mascotCount: 1))
 check("deux en attente : le compte, deux mascottes",
-      describeNotch([session("a", .approval), session("b", .question)]).ears == SessionEars(left: "", right: "2 vous attendent", mascotCount: 2))
+      describeNotch([session("a", .approval), session("b", .question)]).ears == SessionEars(left: "", right: "2 waiting for you", mascotCount: 2))
 check("tri : autorisation, question, travail, terminé",
       describeNotch([session("d", .done), session("w", .working), session("q", .question), session("a", .approval)]).rows.map(\.id) == ["a", "q", "w", "d"])
 check("à phase égale, la plus récente d'abord",
@@ -256,8 +256,8 @@ check("nouveau message : la fin n'est plus à voir", !applying(plain("a", .promp
 check("un outil qui tourne : la fin n'est plus à voir", !applying(plain("a", .toolFinished), to: afterStop, now: t0)[0].hasUnseenFinish)
 check("une demande d'autorisation : la fin n'est plus à voir", !applying(permission("a", reply: nil), to: afterStop, now: t0)[0].hasUnseenFinish)
 check("une session qui démarre n'a rien à faire voir", !applying(plain("n", .started), to: [], now: t0)[0].hasUnseenFinish)
-check("oreilles : une session a fini", describeNotch([finished("a")]).ears == SessionEars(left: "a", right: "Terminé", mascotCount: 1, tone: .finished))
-check("oreilles : deux ont fini", describeNotch([finished("a"), finished("b")]).ears == SessionEars(left: "", right: "2 ont fini", mascotCount: 2, tone: .finished))
+check("oreilles : une session a fini", describeNotch([finished("a")]).ears == SessionEars(left: "a", right: "Done", mascotCount: 1, tone: .finished))
+check("oreilles : deux ont fini", describeNotch([finished("a"), finished("b")]).ears == SessionEars(left: "", right: "2 finished", mascotCount: 2, tone: .finished))
 check("oreilles : une demande passe avant une fin de tour", describeNotch([finished("a"), session("b", .approval)]).ears?.tone == .attention)
 check("oreilles : fin déjà vue, rien", describeNotch([finished("a", unseen: false)]).ears == nil)
 check("oreilles : une session qui travaille n'a pas de pastille", describeNotch([session("w", .working)]).ears == nil)
@@ -273,7 +273,7 @@ func questionPayload(question: String? = "Quelle est ta couleur préférée ?") 
 }
 check("question de Claude : lue comme une question, pas une autorisation",
       SessionEvent.decode(questionPayload())?.kind == .questionAsked(text: "Quelle est ta couleur préférée ?"))
-check("question sans texte : phrase d'attente", SessionEvent.decode(questionPayload(question: nil))?.kind == .questionAsked(text: "Claude vous pose une question"))
+check("question sans texte : phrase d'attente", SessionEvent.decode(questionPayload(question: nil))?.kind == .questionAsked(text: "Claude has a question"))
 let afterQuestion = applying(SessionEvent.decode(questionPayload())!, to: [session("a", .working)], now: t0)
 check("question : la session « vous attend » avec le texte de la question", afterQuestion[0].phase == .question && afterQuestion[0].detail == "Quelle est ta couleur préférée ?")
 check("la notification de permission n'écrase pas la question",
@@ -302,7 +302,7 @@ let pausedMusic = NowPlaying(source: .music, title: "a", artist: "", isPlaying: 
 let playingSpotify = NowPlaying(source: .spotify, title: "b", artist: "", isPlaying: true)
 check("le Lecteur pilote ce qui joue avant ce qui est en pause", currentTrack(among: [pausedMusic, playingSpotify]) == playingSpotify)
 check("sans rien qui joue, le Lecteur garde la source en pause", currentTrack(among: [pausedMusic]) == pausedMusic && currentTrack(among: []) == nil)
-let finishedEars = SessionEars(left: "a", right: "Terminé", mascotCount: 1, tone: .finished)
+let finishedEars = SessionEars(left: "a", right: "Done", mascotCount: 1, tone: .finished)
 check("oreilles : une alerte de session passe avant la musique", earsContent(sessionEars: finishedEars, nowPlaying: playingSpotify) == .session(finishedEars))
 check("oreilles : la musique qui joue s'affiche", earsContent(sessionEars: nil, nowPlaying: playingSpotify) == .nowPlaying(playingSpotify))
 check("oreilles : une musique en pause n'occupe pas l'encoche", earsContent(sessionEars: nil, nowPlaying: pausedMusic) == nil && earsContent(sessionEars: nil, nowPlaying: nil) == nil)
@@ -343,8 +343,8 @@ check("pochette : script de Musique et de Spotify", artworkReadScript(for: .musi
 func tabsLine(_ tabs: [[String: Any]], type: String = "tabs") -> Data {
     try! JSONSerialization.data(withJSONObject: ["type": type, "tabs": tabs])
 }
-let youtubeTab: [String: Any] = ["id": 12, "title": "Mix concentration 2 h", "host": "www.youtube.com", "volume": 70]
-check("onglets : une liste valide est lue", BrowserMessage.parseTabs(tabsLine([youtubeTab])) == [BrowserTab(id: 12, title: "Mix concentration 2 h", host: "www.youtube.com", volume: 70)])
+let youtubeTab: [String: Any] = ["id": 12, "title": "Focus mix, 2 hours", "host": "www.youtube.com", "volume": 70]
+check("onglets : une liste valide est lue", BrowserMessage.parseTabs(tabsLine([youtubeTab])) == [BrowserTab(id: 12, title: "Focus mix, 2 hours", host: "www.youtube.com", volume: 70)])
 check("onglets : mauvais type, texte ou JSON refusés", BrowserMessage.parseTabs(tabsLine([youtubeTab], type: "autre")) == nil && BrowserMessage.parseTabs(Data("pas du json".utf8)) == nil && BrowserMessage.parseTabs(Data("{\"type\":\"tabs\"}".utf8)) == nil)
 check("onglets : volume hors bornes ramené entre 0 et 100, absent : 100", {
     let tabs = BrowserMessage.parseTabs(tabsLine([["id": 1, "volume": 500], ["id": 2, "volume": -3], ["id": 3]]))

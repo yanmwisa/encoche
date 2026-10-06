@@ -25,10 +25,10 @@ enum SessionPhase: Int, Equatable, Comparable {
 
     var label: String {
         switch self {
-        case .approval: "Autorisation"
-        case .question: "Vous attend"
-        case .working: "Travaille"
-        case .done: "Terminé"
+        case .approval: "Permission"
+        case .question: "Waiting for you"
+        case .working: "Working"
+        case .done: "Done"
         }
     }
 }
@@ -153,7 +153,7 @@ extension SessionEvent {
     private static func questionText(of toolInput: [String: Any]) -> String {
         let questions = toolInput["questions"] as? [[String: Any]] ?? []
         let asked = cleaned(questions.first?["question"] as? String ?? "", max: maxTextLength)
-        return asked.isEmpty ? "Claude vous pose une question" : asked
+        return asked.isEmpty ? "Claude has a question" : asked
     }
 
     /// Ce que l'outil demande de faire, en une ligne : la commande, sinon le fichier.
@@ -225,11 +225,11 @@ private func apply(_ kind: SessionEventKind, to session: inout AgentSession) {
     switch kind {
     case .started:
         session.phase = .done
-        session.detail = "Session démarrée"
+        session.detail = "Session started"
         session.hasUnseenFinish = false
     case .promptSubmitted, .toolFinished:
         session.phase = .working
-        session.detail = "Travaille"
+        session.detail = "Working"
         session.hasUnseenFinish = false
     case let .permissionRequested(tool, summary):
         session.phase = .approval
@@ -246,7 +246,7 @@ private func apply(_ kind: SessionEventKind, to session: inout AgentSession) {
         applyNotification(type: type, message: message, to: &session)
     case .stopped:
         session.phase = .done
-        session.detail = "A fini"
+        session.detail = "Finished"
         session.hasUnseenFinish = true
     case .ended:
         break
@@ -262,7 +262,7 @@ private func applyNotification(type: String, message: String, to session: inout 
         session.detail = message
     case "idle_prompt":
         session.phase = .question
-        session.detail = message.isEmpty ? "Attend votre réponse" : message
+        session.detail = message.isEmpty ? "Waiting for your answer" : message
         session.hasUnseenFinish = false
     default:
         break
@@ -328,9 +328,9 @@ private func ears(forFinished finished: [AgentSession]) -> SessionEars? {
     case 0:
         return nil
     case 1:
-        return SessionEars(left: finished[0].name, right: "Terminé", mascotCount: 1, tone: .finished)
+        return SessionEars(left: finished[0].name, right: "Done", mascotCount: 1, tone: .finished)
     default:
-        return SessionEars(left: "", right: "\(finished.count) ont fini", mascotCount: 2, tone: .finished)
+        return SessionEars(left: "", right: "\(finished.count) finished", mascotCount: 2, tone: .finished)
     }
 }
 
@@ -351,7 +351,7 @@ private func ears(forWaiting waiting: [AgentSession]) -> SessionEars? {
         let session = waiting[0]
         return SessionEars(left: session.name, right: session.phase.label, mascotCount: 1)
     default:
-        return SessionEars(left: "", right: "\(waiting.count) vous attendent", mascotCount: 2)
+        return SessionEars(left: "", right: "\(waiting.count) waiting for you", mascotCount: 2)
     }
 }
 

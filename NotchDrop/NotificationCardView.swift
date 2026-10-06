@@ -50,7 +50,7 @@ struct NotificationCardView: View {
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(.secondary)
             Spacer()
-            Text("maintenant")
+            Text("now")
                 .font(.caption)
                 .foregroundStyle(.tertiary)
             Button { vm.notificationDismiss() } label: {
@@ -59,7 +59,7 @@ struct NotificationCardView: View {
             }
             .buttonStyle(.plain)
             .opacity(isHovering ? 1 : 0)
-            .accessibilityLabel("Fermer")
+            .accessibilityLabel("Close")
         }
         .frame(height: vm.deviceNotchRect.height)
     }
@@ -82,13 +82,13 @@ struct NotificationCardView: View {
         case .banner:
             HStack {
                 Spacer()
-                Button("Répondre") { vm.notificationBeginReply() }
+                Button("Reply") { vm.notificationBeginReply() }
                     .buttonStyle(PillButtonStyle())
             }
             .transition(footerTransition)
         case .composing:
             HStack(spacing: 8) {
-                TextField("Répondre à \(message.sender)", text: $replyText)
+                TextField("Reply to \(message.sender)", text: $replyText)
                     .textFieldStyle(.plain)
                     .focused($replyFieldFocused)
                     .onSubmit { vm.notificationSendReply(replyText) }
@@ -103,7 +103,7 @@ struct NotificationCardView: View {
                 .buttonStyle(.plain)
                 .disabled(trimmedReply.isEmpty)
                 .opacity(trimmedReply.isEmpty ? 0.35 : 1)
-                .accessibilityLabel("Envoyer")
+                .accessibilityLabel("Send")
             }
             .transition(footerTransition)
             .onAppear {
@@ -115,7 +115,7 @@ struct NotificationCardView: View {
                 Image(systemName: "checkmark.circle.fill")
                     .foregroundStyle(.green)
                     .symbolEffect(.bounce, value: vm.notificationPhase)
-                Text("Envoyé")
+                Text("Sent")
                     .font(.callout.weight(.semibold))
                 Spacer()
             }

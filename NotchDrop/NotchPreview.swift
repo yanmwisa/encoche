@@ -17,24 +17,24 @@ enum NotchPreview {
     }
 
     private static let sessions: [AgentSession] = [
-        sample("my-project", .approval, "git push origin travail/build-sans-xcode", age: 5),
-        sample("chaosFLOW", .question, "Attend votre réponse", age: 30),
-        sample("Encoche-Mac", .working, "Travaille", age: 8),
-        sample("website", .done, "A fini", age: 200),
+        sample("my-project", .approval, "git push origin feature/search", age: 5),
+        sample("notes", .question, "Waiting for your answer", age: 30),
+        sample("weather-app", .working, "Working", age: 8),
+        sample("website", .done, "Finished", age: 200),
     ]
 
 
     private static var previewSources: [PlayerSource] {
         [
             PlayerSource(source: .music, volume: 55, track: nil),
-            PlayerSource(source: .spotify, volume: 40, track: NowPlaying(source: .spotify, title: "Lofi pour coder", artist: "Playlist", isPlaying: true)),
+            PlayerSource(source: .spotify, volume: 40, track: NowPlaying(source: .spotify, title: "Lofi for coding", artist: "Playlist", isPlaying: true)),
         ]
     }
 
-    private static let playingTrack = NowPlaying(source: .music, title: "Nuit blanche à Lubumbashi", artist: "Les Étoiles du Sud", isPlaying: true)
+    private static let playingTrack = NowPlaying(source: .music, title: "Night Shift", artist: "Southern Stars", isPlaying: true)
 
     private static var finishedSession: AgentSession {
-        var session = sample("website", .done, "A fini", age: 3)
+        var session = sample("website", .done, "Finished", age: 3)
         session.hasUnseenFinish = true
         return session
     }
@@ -47,7 +47,7 @@ enum NotchPreview {
         let full = describeNotch(sessions)
 
         return VStack(alignment: .leading, spacing: 24) {
-            sheetBlock("Barre d'onglets : un onglet par écran, l'écran choisi en pastille", height: 150) {
+            sheetBlock("Tab bar: one tab per screen, the selected one highlighted", height: 150) {
                 VStack(spacing: 10) {
                     ForEach([NotchViewModel.ContentType.normal, .sessions, .player, .menu], id: \.self) { selection in
                         NotchTabBar(selection: selection, waitingCount: 2, onSelect: { _ in })
@@ -57,41 +57,41 @@ enum NotchPreview {
                 .padding(.vertical, 10)
                 .frame(width: 568)
             }
-            sheetBlock("Encoche ouverte : Sessions", height: 184) {
+            sheetBlock("Open notch: Sessions", height: 184) {
                 openedNotch(selection: .sessions) {
                     SessionsListView(summary: full, onGoTo: { _ in }, isScrollable: false)
                 }
             }
-            sheetBlock("Encoche ouverte : une autorisation à donner", height: 184) {
+            sheetBlock("Open notch: a permission to give", height: 184) {
                 openedNotch(selection: .sessions) {
                     ApprovalCardView(
-                        sessionName: "my-project", tool: "Bash", summary: "git push origin travail/build-sans-xcode",
-                        position: "1 sur 2", showsPosition: true, onAnswer: { _ in }
+                        sessionName: "my-project", tool: "Bash", summary: "git push origin feature/search",
+                        position: "1 of 2", showsPosition: true, onAnswer: { _ in }
                     )
                 }
             }
-            sheetBlock("Encoche ouverte : des étapes à choisir", height: 184) {
+            sheetBlock("Open notch: next steps to pick", height: 184) {
                 openedNotch(selection: .sessions) {
                     NextStepsCardView(
-                        sessionName: "Encoche-Mac",
-                        labels: ["Lancer les tests", "Mettre à jour le journal", "Relancer la suite de tests"],
+                        sessionName: "weather-app",
+                        labels: ["Run the tests", "Update the changelog", "Rerun the test suite"],
                         position: "", showsPosition: false, onLaunch: { _ in }, initiallyPicked: [2, 0]
                     )
                 }
             }
-            sheetBlock("Encoche ouverte : Lecteur", height: 184) {
+            sheetBlock("Open notch: Player", height: 184) {
                 openedNotch(selection: .player) {
                     NotchPlayerContent(
-                        sources: [previewSources[1]], controlled: previewSources[1], artwork: { _ in nil }, tabs: [BrowserTab(id: 12, title: "Mix concentration 2 h", host: "www.youtube.com", volume: 70)], systemVolume: 69, isBlocked: false,
+                        sources: [previewSources[1]], controlled: previewSources[1], artwork: { _ in nil }, tabs: [BrowserTab(id: 12, title: "Focus mix, 2 hours", host: "www.youtube.com", volume: 70)], systemVolume: 69, isBlocked: false,
                         onCommand: { _, _ in }, onVolume: { _, _ in }, onMute: { _ in }, onSelect: { _ in }, onTabVolume: { _, _ in },
                         onSystemVolume: { _ in }, onSystemMute: {}
                     )
                 }
             }
-            sheetBlock("Oreilles : de la musique joue", height: 32) {
+            sheetBlock("Ears: music is playing", height: 32) {
                 NowPlayingEarsView(track: playingTrack, notchWidth: notchWidth, earWidth: earWidth, height: 32)
             }
-            sheetBlock("Le vrai logo d'AirDrop, tel que le système le fournit", height: 70) {
+            sheetBlock("The real AirDrop logo, as the system provides it", height: 70) {
                 HStack(spacing: 14) {
                     ShareView.ShareType.airdrop.icon
                         .resizable()
@@ -101,27 +101,27 @@ enum NotchPreview {
                 }
                 .padding(20)
             }
-            sheetBlock("Une session attend", height: 32) {
+            sheetBlock("One session waiting", height: 32) {
                 if let ears = alone.ears {
                     SessionEarsView(ears: ears, notchWidth: notchWidth, earWidth: earWidth, height: 32)
                 }
             }
-            sheetBlock("Une session a fini son tour", height: 32) {
+            sheetBlock("One session finished its turn", height: 32) {
                 if let ears = describeNotch([finishedSession]).ears {
                     SessionEarsView(ears: ears, notchWidth: notchWidth, earWidth: earWidth, height: 32)
                 }
             }
-            sheetBlock("Deux sessions attendent", height: 32) {
+            sheetBlock("Two sessions waiting", height: 32) {
                 if let ears = several.ears {
                     SessionEarsView(ears: ears, notchWidth: notchWidth, earWidth: earWidth, height: 32)
                 }
             }
-            sheetBlock("Liste (encoche ouverte)", height: 230) {
+            sheetBlock("List (open notch)", height: 230) {
                 SessionsListView(summary: full, onGoTo: { _ in }, isScrollable: false)
                     .padding(16)
                     .frame(width: 568, height: 230)
             }
-            sheetBlock("Liste vide", height: 90) {
+            sheetBlock("Empty list", height: 90) {
                 SessionsListView(summary: describeNotch([]), onGoTo: { _ in })
                     .padding(16)
                     .frame(width: 568, height: 90)
