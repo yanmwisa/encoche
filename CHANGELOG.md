@@ -22,6 +22,10 @@ First public release of Encoche, a fork of [NotchDrop](https://github.com/Lakr23
 - Bundle identifier is now `io.github.yanmwisa.encoche` (NotchDrop's own identifier belongs to its App Store app).
 - The README describes Encoche. The App Store badge, the sponsor link and the screenshot of the original app were removed.
 
+### Fixed
+
+- The app built by `scripts/build-app.sh` crashed at launch once its `.build` folder was moved or deleted: Pow's poof transition loads images from `Pow_Pow.bundle`, which Pow only looks for at the root of the app, a place code signing refuses. A tray item now leaves with a fade and scale, and `scripts/check-library-resources.sh` fails the CI if a Pow effect that loads that bundle (poof, anvil, smoke) comes back.
+
 ### Removed
 
 - Unused links to NotchDrop's product and sponsor pages in `NotchDrop/main.swift`.

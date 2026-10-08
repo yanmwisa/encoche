@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Pow
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -38,10 +37,8 @@ struct DropItemView: View {
                 .frame(maxWidth: 64)
         }
         .contentShape(Rectangle())
-        .transition(.asymmetric(
-            insertion: .opacity.combined(with: .scale),
-            removal: .movingParts.poof
-        ))
+        // Pas l'effet poof de Pow : ses images vivent dans Pow_Pow.bundle, introuvable dans une app signée (plantage au lancement).
+        .transition(.opacity.combined(with: .scale))
         .contentShape(Rectangle())
         .onHover { hover = $0 }
         .scaleEffect(hover ? 1.05 : 1.0)
